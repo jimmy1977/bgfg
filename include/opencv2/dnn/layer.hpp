@@ -7,11 +7,9 @@
 //  copy or use the software.
 //
 //
-//                          License Agreement
+//                           License Agreement
 //                For Open Source Computer Vision Library
 //
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
 // Copyright (C) 2013, OpenCV Foundation, all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
@@ -41,19 +39,50 @@
 //
 //M*/
 
-#ifndef OPENCV_VIDEO_HPP
-#define OPENCV_VIDEO_HPP
+#ifndef OPENCV_DNN_LAYER_HPP
+#define OPENCV_DNN_LAYER_HPP
+#include <opencv2/dnn.hpp>
 
-/**
-  @defgroup video Video Analysis
-  @{
-    @defgroup video_motion Motion Analysis
-    @defgroup video_track Object Tracking
-    @defgroup video_c C API
-  @}
-*/
+namespace cv {
+namespace dnn {
+CV__DNN_INLINE_NS_BEGIN
+//! @addtogroup dnn
+//! @{
+//!
+//! @defgroup dnnLayerFactory Utilities for New Layers Registration
+//! @{
 
-#include "opencv2/video/tracking.hpp"
-#include "opencv2/video/background_segm.hpp"
+/** @brief %Layer factory allows to create instances of registered layers. */
+class CV_EXPORTS LayerFactory
+{
+public:
 
-#endif //OPENCV_VIDEO_HPP
+    //! Each Layer class must provide this function to the factory
+    typedef Ptr<Layer>(*Constructor)(LayerParams &params);
+
+    //! Registers the layer class with typename @p type and specified @p constructor. Thread-safe.
+    static void registerLayer(const String &type, Constructor constructor);
+
+    //! Unregisters registered layer with specified type name. Thread-safe.
+    static void unregisterLayer(const String &type);
+
+    //! Check if layer is registered.
+    static bool isLayerRegistered(const std::string& type);
+
+    /** @brief Creates instance of registered layer.
+     *  @param type type name of creating layer.
+     *  @param params parameters which will be used for layer initialization.
+     *  @note Thread-safe.
+     */
+    static Ptr<Layer> createLayerInstance(const String &type, LayerParams& params);
+
+private:
+    LayerFactory();
+};
+
+//! @}
+//! @}
+CV__DNN_INLINE_NS_END
+}
+}
+#endif

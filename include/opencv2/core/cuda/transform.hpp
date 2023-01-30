@@ -7,12 +7,11 @@
 //  copy or use the software.
 //
 //
-//                          License Agreement
+//                           License Agreement
 //                For Open Source Computer Vision Library
 //
 // Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
 // Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -41,19 +40,36 @@
 //
 //M*/
 
-#ifndef OPENCV_VIDEO_HPP
-#define OPENCV_VIDEO_HPP
+#ifndef OPENCV_CUDA_TRANSFORM_HPP
+#define OPENCV_CUDA_TRANSFORM_HPP
 
-/**
-  @defgroup video Video Analysis
-  @{
-    @defgroup video_motion Motion Analysis
-    @defgroup video_track Object Tracking
-    @defgroup video_c C API
-  @}
-*/
+#include "common.hpp"
+#include "utility.hpp"
+#include "detail/transform_detail.hpp"
 
-#include "opencv2/video/tracking.hpp"
-#include "opencv2/video/background_segm.hpp"
+/** @file
+ * @deprecated Use @ref cudev instead.
+ */
 
-#endif //OPENCV_VIDEO_HPP
+//! @cond IGNORED
+
+namespace cv { namespace cuda { namespace device
+{
+    template <typename T, typename D, typename UnOp, typename Mask>
+    static inline void transform(PtrStepSz<T> src, PtrStepSz<D> dst, UnOp op, const Mask& mask, cudaStream_t stream)
+    {
+        typedef TransformFunctorTraits<UnOp> ft;
+        transform_detail::TransformDispatcher<VecTraits<T>::cn == 1 && VecTraits<D>::cn == 1 && ft::smart_shift != 1>::call(src, dst, op, mask, stream);
+    }
+
+    template <typename T1, typename T2, typename D, typename BinOp, typename Mask>
+    static inline void transform(PtrStepSz<T1> src1, PtrStepSz<T2> src2, PtrStepSz<D> dst, BinOp op, const Mask& mask, cudaStream_t stream)
+    {
+        typedef TransformFunctorTraits<BinOp> ft;
+        transform_detail::TransformDispatcher<VecTraits<T1>::cn == 1 && VecTraits<T2>::cn == 1 && VecTraits<D>::cn == 1 && ft::smart_shift != 1>::call(src1, src2, dst, op, mask, stream);
+    }
+}}}
+
+//! @endcond
+
+#endif // OPENCV_CUDA_TRANSFORM_HPP

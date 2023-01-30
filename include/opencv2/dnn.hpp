@@ -7,11 +7,9 @@
 //  copy or use the software.
 //
 //
-//                          License Agreement
+//                           License Agreement
 //                For Open Source Computer Vision Library
 //
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
 // Copyright (C) 2013, OpenCV Foundation, all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
@@ -41,19 +39,40 @@
 //
 //M*/
 
-#ifndef OPENCV_VIDEO_HPP
-#define OPENCV_VIDEO_HPP
+#ifndef OPENCV_DNN_HPP
+#define OPENCV_DNN_HPP
 
-/**
-  @defgroup video Video Analysis
+// This is an umbrella header to include into you project.
+// We are free to change headers layout in dnn subfolder, so please include
+// this header for future compatibility
+
+
+/** @defgroup dnn Deep Neural Network module
   @{
-    @defgroup video_motion Motion Analysis
-    @defgroup video_track Object Tracking
-    @defgroup video_c C API
+    This module contains:
+        - API for new layers creation, layers are building bricks of neural networks;
+        - set of built-in most-useful Layers;
+        - API to construct and modify comprehensive neural networks from layers;
+        - functionality for loading serialized networks models from different frameworks.
+
+    Functionality of this module is designed only for forward pass computations (i.e. network testing).
+    A network training is in principle not supported.
   @}
 */
+/** @example samples/dnn/classification.cpp
+Check @ref tutorial_dnn_googlenet "the corresponding tutorial" for more details
+*/
+/** @example samples/dnn/colorization.cpp
+*/
+/** @example samples/dnn/object_detection.cpp
+Check @ref tutorial_dnn_yolo "the corresponding tutorial" for more details
+*/
+/** @example samples/dnn/openpose.cpp
+*/
+/** @example samples/dnn/segmentation.cpp
+*/
+/** @example samples/dnn/text_detection.cpp
+*/
+#include <opencv2/dnn/dnn.hpp>
 
-#include "opencv2/video/tracking.hpp"
-#include "opencv2/video/background_segm.hpp"
-
-#endif //OPENCV_VIDEO_HPP
+#endif /* OPENCV_DNN_HPP */

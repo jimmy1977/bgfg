@@ -12,7 +12,6 @@
 //
 // Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
 // Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -41,19 +40,47 @@
 //
 //M*/
 
-#ifndef OPENCV_VIDEO_HPP
-#define OPENCV_VIDEO_HPP
+#ifndef OPENCV_STITCHING_AUTOCALIB_HPP
+#define OPENCV_STITCHING_AUTOCALIB_HPP
 
-/**
-  @defgroup video Video Analysis
-  @{
-    @defgroup video_motion Motion Analysis
-    @defgroup video_track Object Tracking
-    @defgroup video_c C API
-  @}
-*/
+#include "opencv2/core.hpp"
+#include "matchers.hpp"
 
-#include "opencv2/video/tracking.hpp"
-#include "opencv2/video/background_segm.hpp"
+namespace cv {
+namespace detail {
 
-#endif //OPENCV_VIDEO_HPP
+//! @addtogroup stitching_autocalib
+//! @{
+
+/** @brief Tries to estimate focal lengths from the given homography under the assumption that the camera
+undergoes rotations around its centre only.
+
+@param H Homography.
+@param f0 Estimated focal length along X axis.
+@param f1 Estimated focal length along Y axis.
+@param f0_ok True, if f0 was estimated successfully, false otherwise.
+@param f1_ok True, if f1 was estimated successfully, false otherwise.
+
+See "Construction of Panoramic Image Mosaics with Global and Local Alignment"
+by Heung-Yeung Shum and Richard Szeliski.
+ */
+void CV_EXPORTS_W focalsFromHomography(const Mat &H, double &f0, double &f1, bool &f0_ok, bool &f1_ok);
+
+/** @brief Estimates focal lengths for each given camera.
+
+@param features Features of images.
+@param pairwise_matches Matches between all image pairs.
+@param focals Estimated focal lengths for each camera.
+ */
+void CV_EXPORTS estimateFocal(const std::vector<ImageFeatures> &features,
+                              const std::vector<MatchesInfo> &pairwise_matches,
+                              std::vector<double> &focals);
+
+bool CV_EXPORTS_W calibrateRotatingCamera(const std::vector<Mat> &Hs,CV_OUT Mat &K);
+
+//! @} stitching_autocalib
+
+} // namespace detail
+} // namespace cv
+
+#endif // OPENCV_STITCHING_AUTOCALIB_HPP

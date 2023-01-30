@@ -41,19 +41,8 @@
 //
 //M*/
 
-#ifndef OPENCV_VIDEO_HPP
-#define OPENCV_VIDEO_HPP
+#ifdef __OPENCV_BUILD
+#error this is a compatibility header which should not be used inside the OpenCV library
+#endif
 
-/**
-  @defgroup video Video Analysis
-  @{
-    @defgroup video_motion Motion Analysis
-    @defgroup video_track Object Tracking
-    @defgroup video_c C API
-  @}
-*/
-
-#include "opencv2/video/tracking.hpp"
-#include "opencv2/video/background_segm.hpp"
-
-#endif //OPENCV_VIDEO_HPP
+#include "opencv2/core.hpp"

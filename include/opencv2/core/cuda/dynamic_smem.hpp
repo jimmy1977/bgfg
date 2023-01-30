@@ -7,12 +7,11 @@
 //  copy or use the software.
 //
 //
-//                          License Agreement
+//                           License Agreement
 //                For Open Source Computer Vision Library
 //
 // Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
 // Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -41,19 +40,49 @@
 //
 //M*/
 
-#ifndef OPENCV_VIDEO_HPP
-#define OPENCV_VIDEO_HPP
+#ifndef OPENCV_CUDA_DYNAMIC_SMEM_HPP
+#define OPENCV_CUDA_DYNAMIC_SMEM_HPP
 
-/**
-  @defgroup video Video Analysis
-  @{
-    @defgroup video_motion Motion Analysis
-    @defgroup video_track Object Tracking
-    @defgroup video_c C API
-  @}
-*/
+/** @file
+ * @deprecated Use @ref cudev instead.
+ */
 
-#include "opencv2/video/tracking.hpp"
-#include "opencv2/video/background_segm.hpp"
+//! @cond IGNORED
 
-#endif //OPENCV_VIDEO_HPP
+namespace cv { namespace cuda { namespace device
+{
+    template<class T> struct DynamicSharedMem
+    {
+        __device__ __forceinline__ operator T*()
+        {
+            extern __shared__ int __smem[];
+            return (T*)__smem;
+        }
+
+        __device__ __forceinline__ operator const T*() const
+        {
+            extern __shared__ int __smem[];
+            return (T*)__smem;
+        }
+    };
+
+    // specialize for double to avoid unaligned memory access compile errors
+    template<> struct DynamicSharedMem<double>
+    {
+        __device__ __forceinline__ operator double*()
+        {
+            extern __shared__ double __smem_d[];
+            return (double*)__smem_d;
+        }
+
+        __device__ __forceinline__ operator const double*() const
+        {
+            extern __shared__ double __smem_d[];
+            return (double*)__smem_d;
+        }
+    };
+}}}
+
+//! @endcond
+
+#endif // OPENCV_CUDA_DYNAMIC_SMEM_HPP

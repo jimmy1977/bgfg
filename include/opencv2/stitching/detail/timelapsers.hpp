@@ -12,7 +12,6 @@
 //
 // Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
 // Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -41,19 +40,52 @@
 //
 //M*/
 
-#ifndef OPENCV_VIDEO_HPP
-#define OPENCV_VIDEO_HPP
 
-/**
-  @defgroup video Video Analysis
-  @{
-    @defgroup video_motion Motion Analysis
-    @defgroup video_track Object Tracking
-    @defgroup video_c C API
-  @}
-*/
+#ifndef OPENCV_STITCHING_TIMELAPSERS_HPP
+#define OPENCV_STITCHING_TIMELAPSERS_HPP
 
-#include "opencv2/video/tracking.hpp"
-#include "opencv2/video/background_segm.hpp"
+#include "opencv2/core.hpp"
 
-#endif //OPENCV_VIDEO_HPP
+namespace cv {
+namespace detail {
+
+//! @addtogroup stitching
+//! @{
+
+//  Base Timelapser class, takes a sequence of images, applies appropriate shift, stores result in dst_.
+
+class CV_EXPORTS_W Timelapser
+{
+public:
+
+    enum {AS_IS, CROP};
+
+    virtual ~Timelapser() {}
+
+    CV_WRAP static Ptr<Timelapser> createDefault(int type);
+
+    CV_WRAP virtual void initialize(const std::vector<Point> &corners, const std::vector<Size> &sizes);
+    CV_WRAP virtual void process(InputArray img, InputArray mask, Point tl);
+    CV_WRAP virtual const UMat& getDst() {return dst_;}
+
+protected:
+
+    virtual bool test_point(Point pt);
+
+    UMat dst_;
+    Rect dst_roi_;
+};
+
+
+class CV_EXPORTS_W TimelapserCrop : public Timelapser
+{
+public:
+    virtual void initialize(const std::vector<Point> &corners, const std::vector<Size> &sizes) CV_OVERRIDE;
+};
+
+//! @}
+
+} // namespace detail
+} // namespace cv
+
+#endif // OPENCV_STITCHING_TIMELAPSERS_HPP

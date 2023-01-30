@@ -7,12 +7,11 @@
 //  copy or use the software.
 //
 //
-//                          License Agreement
+//                           License Agreement
 //                For Open Source Computer Vision Library
 //
 // Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
 // Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -41,19 +40,47 @@
 //
 //M*/
 
-#ifndef OPENCV_VIDEO_HPP
-#define OPENCV_VIDEO_HPP
+#ifndef OPENCV_CORE_CUDA_STREAM_ACCESSOR_HPP
+#define OPENCV_CORE_CUDA_STREAM_ACCESSOR_HPP
 
-/**
-  @defgroup video Video Analysis
-  @{
-    @defgroup video_motion Motion Analysis
-    @defgroup video_track Object Tracking
-    @defgroup video_c C API
-  @}
-*/
+#ifndef __cplusplus
+#  error cuda_stream_accessor.hpp header must be compiled as C++
+#endif
 
-#include "opencv2/video/tracking.hpp"
-#include "opencv2/video/background_segm.hpp"
+/** @file cuda_stream_accessor.hpp
+ * This is only header file that depends on CUDA Runtime API. All other headers are independent.
+ */
 
-#endif //OPENCV_VIDEO_HPP
+#include <cuda_runtime.h>
+#include "opencv2/core/cuda.hpp"
+
+namespace cv
+{
+    namespace cuda
+    {
+
+//! @addtogroup cudacore_struct
+//! @{
+
+        /** @brief Class that enables getting cudaStream_t from cuda::Stream
+         */
+        struct StreamAccessor
+        {
+            CV_EXPORTS static cudaStream_t getStream(const Stream& stream);
+            CV_EXPORTS static Stream wrapStream(cudaStream_t stream);
+        };
+
+        /** @brief Class that enables getting cudaEvent_t from cuda::Event
+         */
+        struct EventAccessor
+        {
+            CV_EXPORTS static cudaEvent_t getEvent(const Event& event);
+            CV_EXPORTS static Event wrapEvent(cudaEvent_t event);
+        };
+
+//! @}
+
+    }
+}
+
+#endif /* OPENCV_CORE_CUDA_STREAM_ACCESSOR_HPP */

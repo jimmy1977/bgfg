@@ -7,12 +7,11 @@
 //  copy or use the software.
 //
 //
-//                          License Agreement
+//                           License Agreement
 //                For Open Source Computer Vision Library
 //
 // Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
 // Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -41,19 +40,37 @@
 //
 //M*/
 
-#ifndef OPENCV_VIDEO_HPP
-#define OPENCV_VIDEO_HPP
+#ifndef OPENCV_CUDA_WARP_REDUCE_HPP__
+#define OPENCV_CUDA_WARP_REDUCE_HPP__
 
-/**
-  @defgroup video Video Analysis
-  @{
-    @defgroup video_motion Motion Analysis
-    @defgroup video_track Object Tracking
-    @defgroup video_c C API
-  @}
-*/
+/** @file
+ * @deprecated Use @ref cudev instead.
+ */
 
-#include "opencv2/video/tracking.hpp"
-#include "opencv2/video/background_segm.hpp"
+//! @cond IGNORED
 
-#endif //OPENCV_VIDEO_HPP
+namespace cv { namespace cuda { namespace device
+{
+    template <class T>
+    __device__ __forceinline__ T warp_reduce(volatile T *ptr , const unsigned int tid = threadIdx.x)
+    {
+        const unsigned int lane = tid & 31; // index of thread in warp (0..31)
+
+        if (lane < 16)
+        {
+            T partial = ptr[tid];
+
+            ptr[tid] = partial = partial + ptr[tid + 16];
+            ptr[tid] = partial = partial + ptr[tid + 8];
+            ptr[tid] = partial = partial + ptr[tid + 4];
+            ptr[tid] = partial = partial + ptr[tid + 2];
+            ptr[tid] = partial = partial + ptr[tid + 1];
+        }
+
+        return ptr[tid - lane];
+    }
+}}} // namespace cv { namespace cuda { namespace cudev {
+
+//! @endcond
+
+#endif /* OPENCV_CUDA_WARP_REDUCE_HPP__ */

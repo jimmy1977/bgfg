@@ -7,12 +7,11 @@
 //  copy or use the software.
 //
 //
-//                          License Agreement
+//                           License Agreement
 //                For Open Source Computer Vision Library
 //
 // Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
+// Copyright (C) 2009-2010, Willow Garage Inc., all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -41,19 +40,56 @@
 //
 //M*/
 
-#ifndef OPENCV_VIDEO_HPP
-#define OPENCV_VIDEO_HPP
+#ifndef OPENCV_ALL_HPP
+#define OPENCV_ALL_HPP
 
-/**
-  @defgroup video Video Analysis
-  @{
-    @defgroup video_motion Motion Analysis
-    @defgroup video_track Object Tracking
-    @defgroup video_c C API
-  @}
-*/
+// File that defines what modules where included during the build of OpenCV
+// These are purely the defines of the correct HAVE_OPENCV_modulename values
+#include "opencv2/opencv_modules.hpp"
 
-#include "opencv2/video/tracking.hpp"
-#include "opencv2/video/background_segm.hpp"
+// Then the list of defines is checked to include the correct headers
+// Core library is always included --> without no OpenCV functionality available
+#include "opencv2/core.hpp"
 
-#endif //OPENCV_VIDEO_HPP
+// Then the optional modules are checked
+#ifdef HAVE_OPENCV_CALIB3D
+#include "opencv2/calib3d.hpp"
+#endif
+#ifdef HAVE_OPENCV_FEATURES2D
+#include "opencv2/features2d.hpp"
+#endif
+#ifdef HAVE_OPENCV_DNN
+#include "opencv2/dnn.hpp"
+#endif
+#ifdef HAVE_OPENCV_FLANN
+#include "opencv2/flann.hpp"
+#endif
+#ifdef HAVE_OPENCV_HIGHGUI
+#include "opencv2/highgui.hpp"
+#endif
+#ifdef HAVE_OPENCV_IMGCODECS
+#include "opencv2/imgcodecs.hpp"
+#endif
+#ifdef HAVE_OPENCV_IMGPROC
+#include "opencv2/imgproc.hpp"
+#endif
+#ifdef HAVE_OPENCV_ML
+#include "opencv2/ml.hpp"
+#endif
+#ifdef HAVE_OPENCV_OBJDETECT
+#include "opencv2/objdetect.hpp"
+#endif
+#ifdef HAVE_OPENCV_PHOTO
+#include "opencv2/photo.hpp"
+#endif
+#ifdef HAVE_OPENCV_STITCHING
+#include "opencv2/stitching.hpp"
+#endif
+#ifdef HAVE_OPENCV_VIDEO
+#include "opencv2/video.hpp"
+#endif
+#ifdef HAVE_OPENCV_VIDEOIO
+#include "opencv2/videoio.hpp"
+#endif
+
+#endif

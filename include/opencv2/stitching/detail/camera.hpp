@@ -12,7 +12,6 @@
 //
 // Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
 // Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -41,19 +40,39 @@
 //
 //M*/
 
-#ifndef OPENCV_VIDEO_HPP
-#define OPENCV_VIDEO_HPP
+#ifndef OPENCV_STITCHING_CAMERA_HPP
+#define OPENCV_STITCHING_CAMERA_HPP
 
-/**
-  @defgroup video Video Analysis
-  @{
-    @defgroup video_motion Motion Analysis
-    @defgroup video_track Object Tracking
-    @defgroup video_c C API
-  @}
-*/
+#include "opencv2/core.hpp"
 
-#include "opencv2/video/tracking.hpp"
-#include "opencv2/video/background_segm.hpp"
+namespace cv {
+namespace detail {
 
-#endif //OPENCV_VIDEO_HPP
+//! @addtogroup stitching
+//! @{
+
+/** @brief Describes camera parameters.
+
+@note Translation is assumed to be zero during the whole stitching pipeline. :
+ */
+struct CV_EXPORTS_W_SIMPLE CameraParams
+{
+    CameraParams();
+    CameraParams(const CameraParams& other);
+    CameraParams& operator =(const CameraParams& other);
+    CV_WRAP Mat K() const;
+
+    CV_PROP_RW double focal; // Focal length
+    CV_PROP_RW double aspect; // Aspect ratio
+    CV_PROP_RW double ppx; // Principal point X
+    CV_PROP_RW double ppy; // Principal point Y
+    CV_PROP_RW Mat R; // Rotation
+    CV_PROP_RW Mat t; // Translation
+};
+
+//! @}
+
+} // namespace detail
+} // namespace cv
+
+#endif // #ifndef OPENCV_STITCHING_CAMERA_HPP

@@ -7,12 +7,11 @@
 //  copy or use the software.
 //
 //
-//                          License Agreement
+//                           License Agreement
 //                For Open Source Computer Vision Library
 //
 // Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
 // Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -41,19 +40,40 @@
 //
 //M*/
 
-#ifndef OPENCV_VIDEO_HPP
-#define OPENCV_VIDEO_HPP
+#ifndef OPENCV_CUDA_DEVICE_FUNCATTRIB_HPP
+#define OPENCV_CUDA_DEVICE_FUNCATTRIB_HPP
 
-/**
-  @defgroup video Video Analysis
-  @{
-    @defgroup video_motion Motion Analysis
-    @defgroup video_track Object Tracking
-    @defgroup video_c C API
-  @}
-*/
+#include <cstdio>
 
-#include "opencv2/video/tracking.hpp"
-#include "opencv2/video/background_segm.hpp"
+/** @file
+ * @deprecated Use @ref cudev instead.
+ */
 
-#endif //OPENCV_VIDEO_HPP
+//! @cond IGNORED
+
+namespace cv { namespace cuda { namespace device
+{
+    template<class Func>
+    void printFuncAttrib(Func& func)
+    {
+
+        cudaFuncAttributes attrs;
+        cudaFuncGetAttributes(&attrs, func);
+
+        printf("=== Function stats ===\n");
+        printf("Name: \n");
+        printf("sharedSizeBytes    = %d\n", attrs.sharedSizeBytes);
+        printf("constSizeBytes     = %d\n", attrs.constSizeBytes);
+        printf("localSizeBytes     = %d\n", attrs.localSizeBytes);
+        printf("maxThreadsPerBlock = %d\n", attrs.maxThreadsPerBlock);
+        printf("numRegs            = %d\n", attrs.numRegs);
+        printf("ptxVersion         = %d\n", attrs.ptxVersion);
+        printf("binaryVersion      = %d\n", attrs.binaryVersion);
+        printf("\n");
+        fflush(stdout);
+    }
+}}} // namespace cv { namespace cuda { namespace cudev
+
+//! @endcond
+
+#endif  /* OPENCV_CUDA_DEVICE_FUNCATTRIB_HPP */
