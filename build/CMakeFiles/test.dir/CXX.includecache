@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/srv/code/bgfg/bgfg_gaussmix.cpp
+precomp.hpp
+/srv/code/bgfg/precomp.hpp
+float.h
+-
+
+/srv/code/bgfg/precomp.hpp
+

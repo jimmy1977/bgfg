@@ -1,0 +1,3 @@
+/srv/code/bgfg/build/CMakeFiles/rebuild_cache.dir
+/srv/code/bgfg/build/CMakeFiles/edit_cache.dir
+/srv/code/bgfg/build/CMakeFiles/test.dir

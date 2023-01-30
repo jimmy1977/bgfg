@@ -69,7 +69,7 @@ static const double defaultVarThreshold = 2.5*2.5;
 static const double defaultNoiseSigma = 30*0.5;
 static const double defaultInitialWeight = 0.05;
 
-class BackgroundSubtractorMOGImpl CV_FINAL : public BackgroundSubtractorMOG
+class BackgroundSubtractorMOGImpl final : public BackgroundSubtractorMOG
 {
 public:
     //! the default constructor
