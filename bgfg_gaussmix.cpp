@@ -40,8 +40,15 @@
 //
 //M*/
 
-#include "precomp.hpp"
+// Moved this from precomp.hpp 
+#include "opencv2/bgsegm.hpp"
+#include <opencv2/video.hpp>
+#include <opencv2/imgproc.hpp>
+
+#include <algorithm>
+#include <cmath>
 #include <float.h>
+#include <iostream>
 
 // to make sure we can use these short names
 #undef K
@@ -69,7 +76,7 @@ static const double defaultVarThreshold = 2.5*2.5;
 static const double defaultNoiseSigma = 30*0.5;
 static const double defaultInitialWeight = 0.05;
 
-class BackgroundSubtractorMOGImpl CV_FINAL : public BackgroundSubtractorMOG
+class BackgroundSubtractorMOGImpl final : public BackgroundSubtractorMOG
 {
 public:
     //! the default constructor
@@ -468,6 +475,12 @@ Ptr<BackgroundSubtractorMOG> createBackgroundSubtractorMOG(int history, int nmix
 }
 
 }
+}
+
+
+int main() { 
+    std::cout << "Hello from main" << std::endl;
+    return 0;
 }
 
 /* End of file. */
