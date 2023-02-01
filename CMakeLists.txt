@@ -3,7 +3,7 @@ project(bgfg_seg VERSION 1.0 LANGUAGES CXX)
 
 find_package(pybind11 REQUIRED)
 find_package(PythonInterp 3.9 REQUIRED)
-find_package(OpenCV REQUIRED core)
+#find_package(OpenCV REQUIRED core)
 find_package(Python3 REQUIRED)
 
 LINK_DIRECTORIES(${PYTHON_LIBRARY})
