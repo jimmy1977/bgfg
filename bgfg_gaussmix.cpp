@@ -45,6 +45,12 @@
 #include <opencv2/video.hpp>
 #include <opencv2/imgproc.hpp>
 
+// pybind11 
+#include <pybind11/pybind11.h>
+#include <pybind11/functional.h>
+#include <pybind11/numpy.h>
+#include <pybind11/stl.h>
+
 #include <algorithm>
 #include <cmath>
 #include <float.h>
@@ -54,6 +60,9 @@
 #undef K
 #undef L
 #undef T
+
+// Make it easier 
+namespace py = pybind11; 
 
 // This is based on the "An Improved Adaptive Background Mixture Model for
 // Real-time Tracking with Shadow Detection" by P. KaewTraKulPong and R. Bowden
@@ -97,6 +106,8 @@ public:
     // the number of gaussian mixtures, the background ratio parameter and the noise strength
     BackgroundSubtractorMOGImpl(int _history, int _nmixtures, double _backgroundRatio, double _noiseSigma=0)
     {
+        std::cout << __PRETTY_FUNCTION__ << "history : " << _history << " mixtures : " << _nmixtures 
+                  << " background ratio : " << _backgroundRatio << " noise sigma : " << _noiseSigma << std::endl;
         frameSize = Size(0,0);
         frameType = 0;
 
@@ -117,6 +128,7 @@ public:
         frameSize = _frameSize;
         frameType = _frameType;
         nframes = 0;
+        std::cout << __PRETTY_FUNCTION__ << std::endl;
 
         int nchannels = CV_MAT_CN(frameType);
         CV_Assert( CV_MAT_DEPTH(frameType) == CV_8U );
@@ -196,6 +208,7 @@ static void process8uC1( const Mat& image, Mat& fgmask, double learningRate,
     int K = nmixtures;
     MixData<float>* mptr = (MixData<float>*)bgmodel.data;
 
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
     const float w0 = (float)defaultInitialWeight;
     const float sk0 = (float)(w0/(defaultNoiseSigma*2));
     const float var0 = (float)(defaultNoiseSigma*defaultNoiseSigma*4);
@@ -322,6 +335,8 @@ static void process8uC3( const Mat& image, Mat& fgmask, double learningRate,
     int x, y, k, k1, rows = image.rows, cols = image.cols;
     float alpha = (float)learningRate, T = (float)backgroundRatio, vT = (float)varThreshold;
     int K = nmixtures;
+
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
 
     const float w0 = (float)defaultInitialWeight;
     const float sk0 = (float)(w0/(defaultNoiseSigma*2*std::sqrt(3.)));
@@ -477,10 +492,19 @@ Ptr<BackgroundSubtractorMOG> createBackgroundSubtractorMOG(int history, int nmix
 }
 }
 
-
+#if 0  // not compiling this as a binary anymore 
 int main() { 
     std::cout << "Hello from main" << std::endl;
     return 0;
 }
+#endif 
+
+// PYBIND studff 
+PYBIND11_MODULE(bgfg_seg, m) { 
+    py::class_<cv::bgsegm::BackgroundSubtractorMOGImpl>(m, "bgfg_seg")
+        .def(py::init<int, int, double, double>(), py::arg("history"), py::arg("mixtures"), py::arg("backgroundRatio"), py::arg("noiseSigma"))
+        .def("apply", & cv::bgsegm::BackgroundSubtractorMOGImpl::apply, py::arg("_image"), py::arg("_fgmask"), py::arg("learningRate"));
+}
+
 
 /* End of file. */
