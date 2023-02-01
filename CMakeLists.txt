@@ -18,4 +18,5 @@ target_link_libraries(bgfg_seg opencv_core ippiw ippicv ittnotify -lpython3.9 -l
 target_compile_options(bgfg_seg PUBLIC -fPIC -std=c++14 -O3 -Wall)
 SET_TARGET_PROPERTIES(bgfg_seg PROPERTIES PREFIX "")
 add_custom_command(TARGET bgfg_seg POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/build/bgfg_seg.so ${CMAKE_SOURCE_DIR}/build/bin/bgfg_seg.so)
+add_custom_command(TARGET bgfg_seg POST_BUILD COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_SOURCE_DIR}/build/bgfg_seg.so)
 #ippiw ade ittnotify libprotobuf opencv_calib3d opencv_dnn opencv_features2d opencv_flann opencv_gapi opencv_imgproc opencv_imgcodecs opencv_highgui opencv_ml opencv_objdetect opencv_photo opencv_stitching opencv_ts opencv_video opencv_videoio)
