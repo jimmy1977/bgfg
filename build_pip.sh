@@ -15,6 +15,6 @@ cp ../../build/bin/bgfg_seg.so bgfg_seg/
 bump_version 
 python setup.py sdist bdist_wheel 
 # TODO - figure out where to upload the packages 
-# After upload is done remove the library 
+# TODO - After upload is done remove the library 
 # rm -rf dist 
 cd ../..
