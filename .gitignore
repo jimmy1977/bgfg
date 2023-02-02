@@ -36,3 +36,7 @@ build/
 
 # Anything VSCode related 
 *.vscode*
+
+# Python build related 
+python/dist 
+python/bgfg_seg.egg-info/
