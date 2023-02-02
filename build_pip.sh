@@ -10,10 +10,11 @@ function bump_version {
 }
 
 echo "Building new version of the library"
-cd bgfg/python 
+cd python 
 cp ../../build/bin/bgfg_seg.so bgfg_seg/
 bump_version 
 python setup.py sdist bdist_wheel 
 # TODO - figure out where to upload the packages 
-rm -rf dist 
+# After upload is done remove the library 
+# rm -rf dist 
 cd ../..
