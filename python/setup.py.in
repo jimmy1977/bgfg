@@ -1,0 +1,11 @@
+from distutils.core import setup, Extension
+from distutils.sysconfig import get_python_lib
+
+setup(name = 'Background Foreground Segmentation',
+      packages = ['bgfg_seg'],
+      version = '${PACKAGE_VERSION}',
+      package_dir = { '': '${CMAKE_CURRENT_SOURCE_DIR}' },
+      data_files = [(get_python_lib() + '/bgfg_seg',['../build/bin/bgfg_seg.so'])]
+      author = 'Jimmy Bhaktha' 
+      author_email = 'jimmy316@gmail.com' 
+      )
